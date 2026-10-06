@@ -7,7 +7,6 @@
         <a class="<%= act('/menu') %>" href="/menu">Men&uacute;</a>
         <a class="<%= act('/categorias') %>" href="/categorias">Categor&iacute;as</a>
         <a class="<%= act('/medicamentos') %>" href="/medicamentos">Medicamentos</a>
-        <a class="<%= act('/diseno-bd') %>" href="/diseno-bd">Dise&ntilde;o BD</a>
         <% if (usr.rol === 'administrador' || usr.rol === 'moderador') { %>
           <a href="/categorias/nueva">+ Categor&iacute;a</a>
           <a href="/medicamentos/nuevo">+ Medicamento</a>

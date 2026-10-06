@@ -23,12 +23,6 @@ router.get(
   })
 );
 
-// Diseno de las dos tablas relacionadas
-router.get(
-  '/diseno-bd',
-  requireAuth,
-  wrap(async (req, res) => {
-    const [categorias, medicamentos] = await Promise.all([Categoria.count(), Medicamento.count()]);
     res.render('diseno', { conteo: { categorias, medicamentos } });
   })
 );
