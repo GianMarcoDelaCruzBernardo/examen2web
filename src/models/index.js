@@ -6,16 +6,20 @@ const Laboratorio = require('./Laboratorio');
 const TipoMedic = require('./TipoMedic');
 const Especialidad = require('./Especialidad');
 
-Categoria.hasMany(Medicamento, { foreignKey: 'categoriaId', as: 'categoria' });
-Medicamento.belongsTo(Categoria, { foreignKey: 'categoriaId' });
+// Categoria 1:N Medicamento
+Categoria.hasMany(Medicamento, { foreignKey: 'categoriaId', as: 'medicamentos' });
+Medicamento.belongsTo(Categoria, { foreignKey: 'categoriaId', as: 'categoria' });
 
-Laboratorio.hasMany(Medicamento, { foreignKey: 'laboratorioId', as: 'laboratorio' });
-Medicamento.belongsTo(Laboratorio, { foreignKey: 'laboratorioId' });
+// Laboratorio 1:N Medicamento
+Laboratorio.hasMany(Medicamento, { foreignKey: 'laboratorioId', as: 'medicamentos' });
+Medicamento.belongsTo(Laboratorio, { foreignKey: 'laboratorioId', as: 'laboratorio' });
 
-TipoMedic.hasMany(Medicamento, { foreignKey: 'tipoMedicId', as: 'tipo' });
-Medicamento.belongsTo(TipoMedic, { foreignKey: 'tipoMedicId' });
+// TipoMedic 1:N Medicamento
+TipoMedic.hasMany(Medicamento, { foreignKey: 'tipoMedicId', as: 'medicamentos' });
+Medicamento.belongsTo(TipoMedic, { foreignKey: 'tipoMedicId', as: 'tipo' });
 
-Especialidad.hasMany(Medicamento, { foreignKey: 'especialidadId', as: 'especialidad' });
-Medicamento.belongsTo(Especialidad, { foreignKey: 'especialidadId' });
+// Especialidad 1:N Medicamento
+Especialidad.hasMany(Medicamento, { foreignKey: 'especialidadId', as: 'medicamentos' });
+Medicamento.belongsTo(Especialidad, { foreignKey: 'especialidadId', as: 'especialidad' });
 
 module.exports = { sequelize, Usuario, Categoria, Medicamento, Laboratorio, TipoMedic, Especialidad };

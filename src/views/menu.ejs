@@ -1,27 +1,68 @@
 <%- include('partials/head', { title: 'Menú principal' }) %>
 <% const puedeEditar = ['administrador', 'moderador'].includes(user.rol); %>
-<h1>Menú principal</h1>
+<h1><i class="fas fa-tachometer-alt"></i> Panel de Control</h1>
 <p class="sub">Bienvenido, <strong><%= user.nombre %></strong>. Tu rol es <span class="rol rol-<%= user.rol %>"><%= user.rol %></span>.</p>
 
-<div class="grid">
-  <div class="stat"><span class="num"><%= stats.categorias %></span><span>Categorías</span></div>
-  <div class="stat"><span class="num"><%= stats.medicamentos %></span><span>Medicamentos</span></div>
-  <div class="stat <%= stats.stockBajo ? 'alerta-stat' : '' %>"><span class="num"><%= stats.stockBajo %></span><span>Con stock bajo (&lt; 10)</span></div>
+<div class="grid-stats">
+  <div class="stat-card stat-categorias">
+    <div class="stat-icon"><i class="fas fa-tags"></i></div>
+    <div class="stat-num"><%= stats.categorias %></div>
+    <div class="stat-label">Categorías</div>
+  </div>
+  <div class="stat-card stat-medicamentos">
+    <div class="stat-icon"><i class="fas fa-pills"></i></div>
+    <div class="stat-num"><%= stats.medicamentos %></div>
+    <div class="stat-label">Medicamentos</div>
+  </div>
+  <div class="stat-card stat-stock <%= stats.stockBajo ? 'alerta' : '' %>">
+    <div class="stat-icon"><i class="fas fa-exclamation-triangle"></i></div>
+    <div class="stat-num"><%= stats.stockBajo %></div>
+    <div class="stat-label">Stock Bajo (&lt; 10)</div>
+  </div>
   <% if (stats.usuarios !== null) { %>
-    <div class="stat"><span class="num"><%= stats.usuarios %></span><span>Usuarios</span></div>
+    <div class="stat-card stat-usuarios">
+      <div class="stat-icon"><i class="fas fa-users-cog"></i></div>
+      <div class="stat-num"><%= stats.usuarios %></div>
+      <div class="stat-label">Usuarios</div>
+    </div>
   <% } %>
 </div>
 
-<h2>Accesos rápidos</h2>
-<div class="grid">
-  <a class="acceso" href="/medicamentos"><h3>Medicamentos</h3><p>Consulta el inventario y su categoría.</p></a>
-  <a class="acceso" href="/categorias"><h3>Categorías</h3><p>Revisa las categorías disponibles.</p></a>
+<h2><i class="fas fa-rocket"></i> Accesos Rápidos</h2>
+<div class="grid-accesos">
+  <a class="acceso-card" href="/medicamentos">
+    <div class="acceso-icon"><i class="fas fa-list-alt"></i></div>
+    <h3>Medicamentos</h3>
+    <p>Consulta el inventario y su categoría.</p>
+  </a>
+  <a class="acceso-card" href="/categorias">
+    <div class="acceso-icon"><i class="fas fa-boxes-stacked"></i></div>
+    <h3>Categorías</h3>
+    <p>Revisa las categorías disponibles.</p>
+  </a>
+  <a class="acceso-card" href="/laboratorios">
+    <div class="acceso-icon"><i class="fas fa-flask"></i></div>
+    <h3>Laboratorios</h3>
+    <p>Gestiona los laboratorios farmacéuticos.</p>
+  </a>
   <% if (puedeEditar) { %>
-    <a class="acceso" href="/medicamentos/nuevo"><h3>+ Nuevo medicamento</h3><p>Registra un medicamento.</p></a>
-    <a class="acceso" href="/categorias/nueva"><h3>+ Nueva categoría</h3><p>Registra una categoría.</p></a>
+    <a class="acceso-card" href="/medicamentos/nuevo">
+      <div class="acceso-icon"><i class="fas fa-plus-circle"></i></div>
+      <h3>Nuevo Medicamento</h3>
+      <p>Registra un medicamento en el sistema.</p>
+    </a>
+    <a class="acceso-card" href="/categorias/nueva">
+      <div class="acceso-icon"><i class="fas fa-folder-plus"></i></div>
+      <h3>Nueva Categoría</h3>
+      <p>Registra una nueva categoría.</p>
+    </a>
   <% } %>
   <% if (user.rol === 'administrador') { %>
-    <a class="acceso" href="/usuarios"><h3>Usuarios</h3><p>Administra roles y cuentas.</p></a>
+    <a class="acceso-card" href="/usuarios">
+      <div class="acceso-icon"><i class="fas fa-user-shield"></i></div>
+      <h3>Usuarios</h3>
+      <p>Administra roles y cuentas del sistema.</p>
+    </a>
   <% } %>
 </div>
 <%- include('partials/foot') %>

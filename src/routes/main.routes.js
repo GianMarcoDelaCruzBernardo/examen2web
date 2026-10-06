@@ -8,7 +8,6 @@ const router = express.Router();
 
 router.get('/', (req, res) => res.redirect(req.user ? '/menu' : '/login'));
 
-// Menu principal (se accede al iniciar sesion)
 router.get(
   '/menu',
   requireAuth,
@@ -20,10 +19,6 @@ router.get(
       req.user.rol === 'administrador' ? Usuario.count() : Promise.resolve(null),
     ]);
     res.render('menu', { stats: { categorias, medicamentos, stockBajo, usuarios } });
-  })
-);
-
-    res.render('diseno', { conteo: { categorias, medicamentos } });
   })
 );
 

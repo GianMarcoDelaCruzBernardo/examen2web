@@ -1,0 +1,34 @@
+<%- include('../partials/head', { title: 'Laboratorio' }) %>
+<% const l = laboratorio || {}; %>
+<div class="tarjeta formulario">
+  <h1><%= l.CodLab ? 'Editar laboratorio' : 'Nuevo laboratorio' %></h1>
+  <form method="post" action="<%= l.CodLab ? '/laboratorios/' + l.CodLab + '/editar' : '/laboratorios' %>">
+    <div class="campo">
+      <label>Razón Social</label>
+      <input name="razonSocial" required minlength="3" maxlength="100" value="<%= l.razonSocial || '' %>">
+    </div>
+    <div class="campo">
+      <label>Dirección</label>
+      <input name="direccion" maxlength="150" value="<%= l.direccion || '' %>">
+    </div>
+    <div class="dos-col">
+      <div class="campo">
+        <label>Teléfono</label>
+        <input name="telefono" maxlength="20" value="<%= l.telefono || '' %>">
+      </div>
+      <div class="campo">
+        <label>Email</label>
+        <input name="email" type="email" maxlength="100" value="<%= l.email || '' %>">
+      </div>
+    </div>
+    <div class="campo">
+      <label>Persona de Contacto</label>
+      <input name="contacto" maxlength="80" value="<%= l.contacto || '' %>">
+    </div>
+    <div class="fila-botones">
+      <button class="btn" type="submit">Guardar</button>
+      <a class="btn btn-sec" href="/laboratorios">Cancelar</a>
+    </div>
+  </form>
+</div>
+<%- include('../partials/foot') %>

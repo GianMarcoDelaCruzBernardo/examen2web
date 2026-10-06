@@ -1,8 +1,8 @@
 <%- include('../partials/head', { title: 'Medicamentos' }) %>
 <% const puedeEditar = ['administrador', 'moderador'].includes(user.rol); const esAdmin = user.rol === 'administrador'; const hoy = new Date().toISOString().slice(0, 10); %>
 <div class="titulo-fila">
-  <h1>Medicamentos</h1>
-  <% if (puedeEditar) { %><a class="btn" href="/medicamentos/nuevo">+ Nuevo medicamento</a><% } %>
+  <h1><i class="fas fa-pills"></i> Medicamentos</h1>
+  <% if (puedeEditar) { %><a class="btn" href="/medicamentos/nuevo"><i class="fas fa-plus"></i> Nuevo medicamento</a><% } %>
 </div>
 <div class="tabla-wrap">
   <table>
@@ -11,21 +11,28 @@
     </thead>
     <tbody>
       <% if (!medicamentos.length) { %><tr><td colspan="8" class="vacio">Sin registros</td></tr><% } %>
-      <% medicamentos.forEach(function (m) { %>
+      <% medicamentos.forEach(function (m) { 
+        var labName = (m.laboratorio && m.laboratorio.razonSocial) ? m.laboratorio.razonSocial : '—';
+        var catName = (m.categoria && m.categoria.nombre) ? m.categoria.nombre : '—';
+        var vencido = m.fecha_vencimiento && m.fecha_vencimiento < hoy;
+      %>
         <tr>
           <td><%= m.id %></td>
           <td><strong><%= m.nombre %></strong></td>
-          <td><%= m.laboratorio || '—' %></td>
-          <td><span class="chip"><%= m.categoria ? m.categoria.nombre : '—' %></span></td>
-          <td><%= Number(m.precio).toFixed(2) %></td>
+          <td><span class="chip"><i class="fas fa-flask"></i> <%= labName %></span></td>
+          <td><span class="chip chip-categoria"><%= catName %></span></td>
+          <td>S/ <%= Number(m.precio).toFixed(2) %></td>
           <td class="<%= m.stock < 10 ? 'bajo' : '' %>"><%= m.stock %></td>
-          <td class="<%= m.fecha_vencimiento && m.fecha_vencimiento < hoy ? 'bajo' : '' %>"><%= m.fecha_vencimiento || '—' %></td>
+          <td class="<%= vencido ? 'vencido' : (m.stock < 10 ? 'bajo' : '') %>">
+            <%= m.fecha_vencimiento ? new Date(m.fecha_vencimiento).toLocaleDateString('es-PE') : '—' %>
+            <% if (vencido) { %> <span class="badge"><i class="fas fa-exclamation-triangle"></i> Vencido</span><% } %>
+          </td>
           <% if (puedeEditar) { %>
             <td class="acciones">
-              <a class="btn btn-sm" href="/medicamentos/<%= m.id %>/editar">Editar</a>
+              <a class="btn btn-sm" href="/medicamentos/<%= m.id %>/editar"><i class="fas fa-edit"></i></a>
               <% if (esAdmin) { %>
                 <form method="post" action="/medicamentos/<%= m.id %>/eliminar" onsubmit="return confirm('¿Eliminar este medicamento?')">
-                  <button class="btn btn-sm btn-peligro" type="submit">Eliminar</button>
+                  <button class="btn btn-sm btn-peligro" type="submit"><i class="fas fa-trash"></i></button>
                 </form>
               <% } %>
             </td>

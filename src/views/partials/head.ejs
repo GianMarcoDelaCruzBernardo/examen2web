@@ -4,11 +4,12 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title><%= typeof title !== 'undefined' ? title + ' | ' : '' %>Farmacia</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
 <%- include('nav') %>
 <main class="contenedor">
 <% const fl = locals.flash || {}; %>
-<% if (fl.ok) { %><div class="alerta ok"><%= fl.ok %></div><% } %>
-<% if (fl.error) { %><div class="alerta error"><%= fl.error %></div><% } %>
+<% if (fl.ok) { %><div class="alerta ok"><i class="fas fa-check-circle"></i> <%= fl.ok %></div><% } %>
+<% if (fl.error) { %><div class="alerta error"><i class="fas fa-exclamation-circle"></i> <%= fl.error %></div><% } %>

@@ -1,0 +1,38 @@
+<%- include('../partials/head', { title: 'Laboratorios' }) %>
+<% const puedeEditar = ['administrador', 'moderador'].includes(user.rol); const esAdmin = user.rol === 'administrador'; %>
+<div class="titulo-fila">
+  <h1>Laboratorios</h1>
+  <% if (puedeEditar) { %><a class="btn" href="/laboratorios/nuevo">+ Nuevo laboratorio</a><% } %>
+</div>
+<div class="tabla-wrap">
+  <table>
+    <thead>
+      <tr><th>#</th><th>Razón Social</th><th>Dirección</th><th>Teléfono</th><th>Email</th><th>Contacto</th><th>Medicamentos</th><% if (puedeEditar) { %><th>Acciones</th><% } %></tr>
+    </thead>
+    <tbody>
+      <% if (!laboratorios.length) { %><tr><td colspan="8" class="vacio">Sin registros</td></tr><% } %>
+      <% laboratorios.forEach(function (lab) { %>
+        <tr>
+          <td><%= lab.CodLab %></td>
+          <td><strong><%= lab.razonSocial %></strong></td>
+          <td><%= lab.direccion || '—' %></td>
+          <td><%= lab.telefono || '—' %></td>
+          <td><%= lab.email || '—' %></td>
+          <td><%= lab.contacto || '—' %></td>
+          <td><%= lab.medicamentos.length %></td>
+          <% if (puedeEditar) { %>
+            <td class="acciones">
+              <a class="btn btn-sm" href="/laboratorios/<%= lab.CodLab %>/editar">Editar</a>
+              <% if (esAdmin) { %>
+                <form method="post" action="/laboratorios/<%= lab.CodLab %>/eliminar" onsubmit="return confirm('¿Eliminar este laboratorio?')">
+                  <button class="btn btn-sm btn-peligro" type="submit">Eliminar</button>
+                </form>
+              <% } %>
+            </td>
+          <% } %>
+        </tr>
+      <% }) %>
+    </tbody>
+  </table>
+</div>
+<%- include('../partials/foot') %>

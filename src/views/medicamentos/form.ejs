@@ -1,5 +1,5 @@
 <%- include('../partials/head', { title: 'Medicamento' }) %>
-<% const m = medicamento || {}; const l = listas || {}; %>
+<% const m = medicamento || {}; const c = categorias || []; const labs = laboratorios || []; const tipos = tiposMed || []; const esp = especialidades || []; %>
 <div class="tarjeta formulario">
   <h1><%= m.id ? 'Editar medicamento' : 'Nuevo medicamento' %></h1>
   <form method="post" action="<%= m.id ? '/medicamentos/' + m.id + '/editar' : '/medicamentos' %>">
@@ -9,26 +9,30 @@
     </div>
     <div class="dos-col">
       <div class="campo">
-        <label>Precio</label>
-        <input name="precio" type="number" step="0.01" required value="<%= m.precio || '' %>">
+        <label>Precio (S/)</label>
+        <input name="precio" type="number" step="0.01" min="0" required value="<%= m.precio !== undefined ? m.precio : '' %>">
       </div>
       <div class="campo">
         <label>Stock</label>
-        <input name="stock" type="number" required value="<%= m.stock || 0 %>">
+        <input name="stock" type="number" min="0" required value="<%= m.stock !== undefined ? m.stock : 0 %>">
       </div>
     </div>
     <div class="campo">
       <label>Categoría</label>
       <select name="categoriaId" required>
         <option value="">-- Selecciona --</option>
-        <% l.categorias.forEach(c => { %> <option value="<%= c.id %>" <%= m.categoriaId == c.id ? 'selected' : '' %>><%= c.nombre %></option> <% }) %>
+        <% c.forEach(function(cat) { %>
+          <option value="<%= cat.id %>" <%= m.categoriaId == cat.id ? 'selected' : '' %>><%= cat.nombre %></option>
+        <% }) %>
       </select>
     </div>
     <div class="campo">
       <label>Laboratorio</label>
       <select name="laboratorioId">
         <option value="">-- Selecciona --</option>
-        <% l.laboratorios.forEach(lab => { %> <option value="<%= lab.CodLab %>" <%= m.laboratorioId == lab.CodLab ? 'selected' : '' %>><%= lab.razonSocial %></option> <% }) %>
+        <% labs.forEach(function(lab) { %>
+          <option value="<%= lab.CodLab %>" <%= m.laboratorioId == lab.CodLab ? 'selected' : '' %>><%= lab.razonSocial %></option>
+        <% }) %>
       </select>
     </div>
     <div class="dos-col">
@@ -36,19 +40,23 @@
         <label>Tipo de Medicamento</label>
         <select name="tipoMedicId">
           <option value="">-- Selecciona --</option>
-          <% l.tipos.forEach(t => { %> <option value="<%= t.CodTipoMed %>" <%= m.tipoMedicId == t.CodTipoMed ? 'selected' : '' %>><%= t.descripcion %></option> <% }) %>
+          <% tipos.forEach(function(t) { %>
+            <option value="<%= t.CodTipoMed %>" <%= m.tipoMedicId == t.CodTipoMed ? 'selected' : '' %>><%= t.descripcion %></option>
+          <% }) %>
         </select>
       </div>
       <div class="campo">
         <label>Especialidad</label>
         <select name="especialidadId">
           <option value="">-- Selecciona --</option>
-          <% l.especialidades.forEach(e => { %> <option value="<%= e.CodEspec %>" <%= m.especialidadId == e.CodEspec ? 'selected' : '' %>><%= e.descripcionEsp %></option> <% }) %>
+          <% esp.forEach(function(e) { %>
+            <option value="<%= e.CodEspec %>" <%= m.especialidadId == e.CodEspec ? 'selected' : '' %>><%= e.descripcionEsp %></option>
+          <% }) %>
         </select>
       </div>
     </div>
     <div class="campo">
-      <label>Fecha Vencimiento</label>
+      <label>Fecha de Vencimiento</label>
       <input name="fecha_vencimiento" type="date" value="<%= m.fecha_vencimiento || '' %>">
     </div>
     <div class="fila-botones">
