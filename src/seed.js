@@ -1,64 +1,52 @@
 const bcrypt = require('bcryptjs');
-const { Usuario, Categoria, Medicamento } = require('./models');
+const { Usuario, Categoria, Medicamento, Laboratorio, TipoMedic, Especialidad } = require('./models');
 
 module.exports = async function seed() {
   if ((await Usuario.count()) === 0) {
-    const usuarios = [
-      { nombre: 'Administrador', email: 'admin@farmacia.com', pass: 'Admin123', rol: 'administrador' },
-      { nombre: 'Moderador', email: 'moderador@farmacia.com', pass: 'Mod12345', rol: 'moderador' },
-      { nombre: 'Usuario Demo', email: 'usuario@farmacia.com', pass: 'User12345', rol: 'usuario' },
-    ];
-    for (const u of usuarios) {
-      await Usuario.create({
-        nombre: u.nombre,
-        email: u.email,
-        rol: u.rol,
-        password: await bcrypt.hash(u.pass, 10),
-      });
-    }
-    console.log('[seed] Usuarios insertados');
+    await Usuario.bulkCreate([
+      { nombre: 'Admin', email: 'admin@farmacia.com', rol: 'administrador', password: await bcrypt.hash('Admin123', 10) },
+      { nombre: 'Moderador', email: 'mod@farmacia.com', rol: 'moderador', password: await bcrypt.hash('Mod12345', 10) },
+      { nombre: 'Usuario', email: 'user@farmacia.com', rol: 'usuario', password: await bcrypt.hash('User12345', 10) }
+    ]);
+  }
+
+  if ((await Laboratorio.count()) === 0) {
+    await Laboratorio.bulkCreate([
+      { razonSocial: 'Bayer S.A.', direccion: 'Av. Principal 123', telefono: '01-2345678', email: 'bayer@lab.com', contacto: 'Juan P.' },
+      { razonSocial: 'Pfizer', direccion: 'Calle Salud 456', telefono: '01-8765432', email: 'pfizer@lab.com', contacto: 'Maria G.' },
+      { razonSocial: 'Genfar', direccion: 'Jr. Med 789', telefono: '01-3456789', email: 'genfar@lab.com', contacto: 'Carlos L.' }
+    ]);
+  }
+
+  if ((await TipoMedic.count()) === 0) {
+    await TipoMedic.bulkCreate([
+      { descripcion: 'Tableta' }, { descripcion: 'Jarabe' }, { descripcion: 'Inyeccion' }, { descripcion: 'Cremas' }
+    ]);
+  }
+
+  if ((await Especialidad.count()) === 0) {
+    await Especialidad.bulkCreate([
+      { descripcionEsp: 'Cardiologia' }, { descripcionEsp: 'Pediatria' }, { descripcionEsp: 'Dermatologia' }, { descripcionEsp: 'General' }
+    ]);
   }
 
   if ((await Categoria.count()) === 0) {
-    const nombres = [
-      ['Analgesicos', 'Alivian el dolor y la fiebre'],
-      ['Antibioticos', 'Combaten infecciones bacterianas'],
-      ['Antialergicos', 'Tratan alergias y rinitis'],
-      ['Vitaminas', 'Suplementos vitaminicos y minerales'],
-      ['Antiinflamatorios', 'Reducen inflamacion y dolor muscular'],
-    ];
-    const cat = {};
-    for (const [nombre, descripcion] of nombres) {
-      cat[nombre] = await Categoria.create({ nombre, descripcion });
-    }
-
-    const hoy = new Date();
-    const enMeses = (m) => {
-      const d = new Date(hoy);
-      d.setMonth(d.getMonth() + m);
-      return d.toISOString().slice(0, 10);
-    };
-
-    const meds = [
-      ['Paracetamol 500 mg', 'Genfar', 0.5, 200, 18, 'Analgesicos'],
-      ['Ibuprofeno 400 mg', 'Bayer', 0.9, 150, 14, 'Antiinflamatorios'],
-      ['Amoxicilina 500 mg', 'Medifarma', 1.5, 80, 20, 'Antibioticos'],
-      ['Azitromicina 500 mg', 'Pfizer', 4.2, 40, 24, 'Antibioticos'],
-      ['Loratadina 10 mg', 'Portugal', 0.6, 120, 16, 'Antialergicos'],
-      ['Cetirizina 10 mg', 'Teva', 0.7, 8, 12, 'Antialergicos'],
-      ['Vitamina C 1 g', 'Bayer', 1.2, 300, 22, 'Vitaminas'],
-      ['Naproxeno 550 mg', 'Roche', 1.1, 5, 10, 'Antiinflamatorios'],
-    ];
-    for (const [nombre, laboratorio, precio, stock, meses, c] of meds) {
-      await Medicamento.create({
-        nombre,
-        laboratorio,
-        precio,
-        stock,
-        fecha_vencimiento: enMeses(meses),
-        categoriaId: cat[c].id,
-      });
-    }
-    console.log('[seed] Categorias y medicamentos insertados');
+    await Categoria.bulkCreate([
+      { nombre: 'Analgesicos', descripcion: 'Alivian dolor' },
+      { nombre: 'Antibioticos', descripcion: 'Infecciones' }
+    ]);
   }
+
+  if ((await Medicamento.count()) === 0) {
+    const cats = await Categoria.findAll();
+    const labs = await Laboratorio.findAll();
+    const tipos = await TipoMedic.findAll();
+    const esp = await Especialidad.findAll();
+    
+    await Medicamento.bulkCreate([
+      { nombre: 'Paracetamol 500mg', precio: 0.5, stock: 100, fecha_vencimiento: '2025-12-31', categoriaId: cats[0].id, laboratorioId: labs[0].CodLab, tipoMedicId: tipos[0].CodTipoMed, especialidadId: esp[3].CodEspec },
+      { nombre: 'Amoxicilina 500mg', precio: 1.5, stock: 50, fecha_vencimiento: '2025-11-30', categoriaId: cats[1].id, laboratorioId: labs[1].CodLab, tipoMedicId: tipos[0].CodTipoMed, especialidadId: esp[1].CodEspec }
+    ]);
+  }
+  console.log('[seed] Datos base insertados');
 };

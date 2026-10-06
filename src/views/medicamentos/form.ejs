@@ -1,38 +1,55 @@
 <%- include('../partials/head', { title: 'Medicamento' }) %>
-<% const m = medicamento || {}; %>
+<% const m = medicamento || {}; const l = listas || {}; %>
 <div class="tarjeta formulario">
   <h1><%= m.id ? 'Editar medicamento' : 'Nuevo medicamento' %></h1>
-  <form method="post" action="<%= m.id ? '/medicamentos/' + m.id + '/editar' : '/medicamentos' %>" data-validate>
+  <form method="post" action="<%= m.id ? '/medicamentos/' + m.id + '/editar' : '/medicamentos' %>">
     <div class="campo">
-      <label for="nombre">Nombre</label>
-      <input id="nombre" name="nombre" required minlength="2" maxlength="100" value="<%= m.nombre || '' %>" data-msg="El nombre debe tener entre 2 y 100 caracteres">
+      <label>Nombre</label>
+      <input name="nombre" required value="<%= m.nombre || '' %>">
+    </div>
+    <div class="dos-col">
+      <div class="campo">
+        <label>Precio</label>
+        <input name="precio" type="number" step="0.01" required value="<%= m.precio || '' %>">
+      </div>
+      <div class="campo">
+        <label>Stock</label>
+        <input name="stock" type="number" required value="<%= m.stock || 0 %>">
+      </div>
     </div>
     <div class="campo">
-      <label for="laboratorio">Laboratorio</label>
-      <input id="laboratorio" name="laboratorio" maxlength="100" value="<%= m.laboratorio || '' %>">
-    </div>
-    <div class="campo">
-      <label for="categoriaId">Categoría</label>
-      <select id="categoriaId" name="categoriaId" required data-msg="Selecciona una categoría">
+      <label>Categoría</label>
+      <select name="categoriaId" required>
         <option value="">-- Selecciona --</option>
-        <% categorias.forEach(function (c) { %>
-          <option value="<%= c.id %>" <%= String(m.categoriaId) === String(c.id) ? 'selected' : '' %>><%= c.nombre %></option>
-        <% }) %>
+        <% l.categorias.forEach(c => { %> <option value="<%= c.id %>" <%= m.categoriaId == c.id ? 'selected' : '' %>><%= c.nombre %></option> <% }) %>
+      </select>
+    </div>
+    <div class="campo">
+      <label>Laboratorio</label>
+      <select name="laboratorioId">
+        <option value="">-- Selecciona --</option>
+        <% l.laboratorios.forEach(lab => { %> <option value="<%= lab.CodLab %>" <%= m.laboratorioId == lab.CodLab ? 'selected' : '' %>><%= lab.razonSocial %></option> <% }) %>
       </select>
     </div>
     <div class="dos-col">
       <div class="campo">
-        <label for="precio">Precio (S/)</label>
-        <input id="precio" name="precio" type="number" step="0.01" min="0" required value="<%= m.precio !== undefined && m.precio !== null ? m.precio : '' %>" data-msg="Ingresa un precio mayor o igual a 0">
+        <label>Tipo de Medicamento</label>
+        <select name="tipoMedicId">
+          <option value="">-- Selecciona --</option>
+          <% l.tipos.forEach(t => { %> <option value="<%= t.CodTipoMed %>" <%= m.tipoMedicId == t.CodTipoMed ? 'selected' : '' %>><%= t.descripcion %></option> <% }) %>
+        </select>
       </div>
       <div class="campo">
-        <label for="stock">Stock</label>
-        <input id="stock" name="stock" type="number" step="1" min="0" required value="<%= m.stock !== undefined && m.stock !== null ? m.stock : 0 %>" data-msg="El stock debe ser un entero mayor o igual a 0">
+        <label>Especialidad</label>
+        <select name="especialidadId">
+          <option value="">-- Selecciona --</option>
+          <% l.especialidades.forEach(e => { %> <option value="<%= e.CodEspec %>" <%= m.especialidadId == e.CodEspec ? 'selected' : '' %>><%= e.descripcionEsp %></option> <% }) %>
+        </select>
       </div>
     </div>
     <div class="campo">
-      <label for="fecha_vencimiento">Fecha de vencimiento</label>
-      <input id="fecha_vencimiento" name="fecha_vencimiento" type="date" value="<%= m.fecha_vencimiento || '' %>">
+      <label>Fecha Vencimiento</label>
+      <input name="fecha_vencimiento" type="date" value="<%= m.fecha_vencimiento || '' %>">
     </div>
     <div class="fila-botones">
       <button class="btn" type="submit">Guardar</button>
