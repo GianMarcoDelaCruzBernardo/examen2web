@@ -1,0 +1,38 @@
+<%- include('../partials/head', { title: 'Medicamentos' }) %>
+<% const puedeEditar = ['administrador', 'moderador'].includes(user.rol); const esAdmin = user.rol === 'administrador'; const hoy = new Date().toISOString().slice(0, 10); %>
+<div class="titulo-fila">
+  <h1>Medicamentos</h1>
+  <% if (puedeEditar) { %><a class="btn" href="/medicamentos/nuevo">+ Nuevo medicamento</a><% } %>
+</div>
+<div class="tabla-wrap">
+  <table>
+    <thead>
+      <tr><th>#</th><th>Nombre</th><th>Laboratorio</th><th>Categoría</th><th>Precio (S/)</th><th>Stock</th><th>Vence</th><% if (puedeEditar) { %><th>Acciones</th><% } %></tr>
+    </thead>
+    <tbody>
+      <% if (!medicamentos.length) { %><tr><td colspan="8" class="vacio">Sin registros</td></tr><% } %>
+      <% medicamentos.forEach(function (m) { %>
+        <tr>
+          <td><%= m.id %></td>
+          <td><strong><%= m.nombre %></strong></td>
+          <td><%= m.laboratorio || '—' %></td>
+          <td><span class="chip"><%= m.categoria ? m.categoria.nombre : '—' %></span></td>
+          <td><%= Number(m.precio).toFixed(2) %></td>
+          <td class="<%= m.stock < 10 ? 'bajo' : '' %>"><%= m.stock %></td>
+          <td class="<%= m.fecha_vencimiento && m.fecha_vencimiento < hoy ? 'bajo' : '' %>"><%= m.fecha_vencimiento || '—' %></td>
+          <% if (puedeEditar) { %>
+            <td class="acciones">
+              <a class="btn btn-sm" href="/medicamentos/<%= m.id %>/editar">Editar</a>
+              <% if (esAdmin) { %>
+                <form method="post" action="/medicamentos/<%= m.id %>/eliminar" onsubmit="return confirm('¿Eliminar este medicamento?')">
+                  <button class="btn btn-sm btn-peligro" type="submit">Eliminar</button>
+                </form>
+              <% } %>
+            </td>
+          <% } %>
+        </tr>
+      <% }) %>
+    </tbody>
+  </table>
+</div>
+<%- include('../partials/foot') %>

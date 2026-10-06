@@ -1,0 +1,31 @@
+<%- include('../partials/head', { title: 'Usuarios' }) %>
+<h1>Usuarios</h1>
+<div class="tabla-wrap">
+  <table>
+    <thead><tr><th>#</th><th>Nombre</th><th>Correo</th><th>Rol</th><th>Acciones</th></tr></thead>
+    <tbody>
+      <% usuarios.forEach(function (u) { %>
+        <tr>
+          <td><%= u.id %></td>
+          <td><%= u.nombre %></td>
+          <td><%= u.email %></td>
+          <td><span class="rol rol-<%= u.rol %>"><%= u.rol %></span></td>
+          <td class="acciones">
+            <% if (u.id !== user.id) { %>
+              <form method="post" action="/usuarios/<%= u.id %>/rol" class="en-linea">
+                <select name="rol">
+                  <% roles.forEach(function (r) { %><option value="<%= r %>" <%= u.rol === r ? 'selected' : '' %>><%= r %></option><% }) %>
+                </select>
+                <button class="btn btn-sm" type="submit">Cambiar</button>
+              </form>
+              <form method="post" action="/usuarios/<%= u.id %>/eliminar" onsubmit="return confirm('¿Eliminar este usuario?')">
+                <button class="btn btn-sm btn-peligro" type="submit">Eliminar</button>
+              </form>
+            <% } else { %><em>(tú)</em><% } %>
+          </td>
+        </tr>
+      <% }) %>
+    </tbody>
+  </table>
+</div>
+<%- include('../partials/foot') %>

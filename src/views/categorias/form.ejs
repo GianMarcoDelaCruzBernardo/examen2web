@@ -1,0 +1,20 @@
+<%- include('../partials/head', { title: 'Categoría' }) %>
+<% const c = categoria || {}; %>
+<div class="tarjeta formulario">
+  <h1><%= c.id ? 'Editar categoría' : 'Nueva categoría' %></h1>
+  <form method="post" action="<%= c.id ? '/categorias/' + c.id + '/editar' : '/categorias' %>" data-validate>
+    <div class="campo">
+      <label for="nombre">Nombre</label>
+      <input id="nombre" name="nombre" required minlength="2" maxlength="60" value="<%= c.nombre || '' %>" data-msg="El nombre debe tener entre 2 y 60 caracteres">
+    </div>
+    <div class="campo">
+      <label for="descripcion">Descripción</label>
+      <textarea id="descripcion" name="descripcion" rows="3" maxlength="300"><%= c.descripcion || '' %></textarea>
+    </div>
+    <div class="fila-botones">
+      <button class="btn" type="submit">Guardar</button>
+      <a class="btn btn-sec" href="/categorias">Cancelar</a>
+    </div>
+  </form>
+</div>
+<%- include('../partials/foot') %>

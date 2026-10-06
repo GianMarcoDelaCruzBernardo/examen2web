@@ -1,0 +1,25 @@
+<%- include('../partials/head', { title: 'Iniciar sesi&oacute;n'.replace('&oacute;', 'ó') }) %>
+<div class="tarjeta auth">
+  <h1>Iniciar sesión</h1>
+  <form method="post" action="/login" data-validate>
+    <div class="campo">
+      <label for="email">Correo electrónico</label>
+      <input id="email" name="email" type="email" required autocomplete="email" value="<%= email %>" data-msg="Ingresa un correo válido">
+    </div>
+    <div class="campo">
+      <label for="password">Clave</label>
+      <input id="password" name="password" type="password" required autocomplete="current-password" data-msg="La clave es obligatoria">
+    </div>
+    <button class="btn btn-bloque" type="submit">Entrar</button>
+  </form>
+  <p class="nota">¿No tienes cuenta? <a href="/registro">Regístrate</a></p>
+  <details class="demo">
+    <summary>Usuarios de prueba</summary>
+    <ul>
+      <li>admin@farmacia.com / Admin123</li>
+      <li>moderador@farmacia.com / Mod12345</li>
+      <li>usuario@farmacia.com / User12345</li>
+    </ul>
+  </details>
+</div>
+<%- include('../partials/foot') %>

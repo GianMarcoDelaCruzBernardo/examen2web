@@ -1,0 +1,34 @@
+<%- include('../partials/head', { title: 'Registro' }) %>
+<% const d = datos || {}; %>
+<div class="tarjeta auth">
+  <h1>Crear cuenta</h1>
+  <form method="post" action="/registro" data-validate>
+    <div class="campo">
+      <label for="nombre">Nombre completo</label>
+      <input id="nombre" name="nombre" required minlength="3" maxlength="80" value="<%= d.nombre || '' %>" data-msg="El nombre debe tener al menos 3 caracteres">
+    </div>
+    <div class="campo">
+      <label for="email">Correo electrónico</label>
+      <input id="email" name="email" type="email" required value="<%= d.email || '' %>" data-msg="Ingresa un correo válido">
+    </div>
+    <div class="campo">
+      <label for="rol">Rol (solo para la demostración)</label>
+      <select id="rol" name="rol" required>
+        <% ['usuario', 'moderador', 'administrador'].forEach(function (r) { %>
+          <option value="<%= r %>" <%= (d.rol || 'usuario') === r ? 'selected' : '' %>><%= r %></option>
+        <% }) %>
+      </select>
+    </div>
+    <div class="campo">
+      <label for="password">Clave</label>
+      <input id="password" name="password" type="password" required pattern="(?=.*[A-Za-z])(?=.*\d).{6,}" data-msg="Mínimo 6 caracteres, con letras y números">
+    </div>
+    <div class="campo">
+      <label for="confirmar">Confirmar clave</label>
+      <input id="confirmar" name="confirmar" type="password" required data-msg="Confirma tu clave">
+    </div>
+    <button class="btn btn-bloque" type="submit">Registrarme</button>
+  </form>
+  <p class="nota">¿Ya tienes cuenta? <a href="/login">Inicia sesión</a></p>
+</div>
+<%- include('../partials/foot') %>

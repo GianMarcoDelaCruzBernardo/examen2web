@@ -1,0 +1,45 @@
+<%- include('partials/head', { title: 'Diseño de la BD' }) %>
+<h1>Diseño de la base de datos <code>bd_Farmacia</code></h1>
+<p class="sub">Dos tablas relacionadas creadas con Sequelize. Relación <strong>1 : N</strong> (una categoría tiene muchos medicamentos).</p>
+
+<div class="er">
+  <div class="entidad">
+    <div class="entidad-t">categorias <small>(<%= conteo.categorias %> registros)</small></div>
+    <table>
+      <tr><td class="pk">PK</td><td>id</td><td>INTEGER</td></tr>
+      <tr><td></td><td>nombre</td><td>STRING(60), único</td></tr>
+      <tr><td></td><td>descripcion</td><td>TEXT</td></tr>
+      <tr><td></td><td>createdAt</td><td>DATETIME</td></tr>
+      <tr><td></td><td>updatedAt</td><td>DATETIME</td></tr>
+    </table>
+  </div>
+
+  <div class="relacion">
+    <span>1</span>
+    <div class="linea"></div>
+    <span>N</span>
+    <small>hasMany / belongsTo</small>
+  </div>
+
+  <div class="entidad">
+    <div class="entidad-t">medicamentos <small>(<%= conteo.medicamentos %> registros)</small></div>
+    <table>
+      <tr><td class="pk">PK</td><td>id</td><td>INTEGER</td></tr>
+      <tr><td></td><td>nombre</td><td>STRING(100)</td></tr>
+      <tr><td></td><td>laboratorio</td><td>STRING(100)</td></tr>
+      <tr><td></td><td>precio</td><td>DECIMAL(10,2)</td></tr>
+      <tr><td></td><td>stock</td><td>INTEGER</td></tr>
+      <tr><td></td><td>fecha_vencimiento</td><td>DATEONLY</td></tr>
+      <tr><td class="fk">FK</td><td>categoriaId</td><td>→ categorias.id</td></tr>
+      <tr><td></td><td>createdAt / updatedAt</td><td>DATETIME</td></tr>
+    </table>
+  </div>
+</div>
+
+<div class="tarjeta">
+  <h3>Código de la relación (Sequelize)</h3>
+  <pre>Categoria.hasMany(Medicamento, { foreignKey: 'categoriaId', as: 'medicamentos', onDelete: 'RESTRICT' });
+Medicamento.belongsTo(Categoria, { foreignKey: 'categoriaId', as: 'categoria' });</pre>
+  <p class="nota">Además existe la tabla <code>usuarios</code> (id, nombre, email, password con hash bcrypt, rol) para el login con JWT.</p>
+</div>
+<%- include('partials/foot') %>

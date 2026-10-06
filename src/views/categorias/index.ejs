@@ -1,0 +1,35 @@
+<%- include('../partials/head', { title: 'Categorías' }) %>
+<% const puedeEditar = ['administrador', 'moderador'].includes(user.rol); const esAdmin = user.rol === 'administrador'; %>
+<div class="titulo-fila">
+  <h1>Categorías</h1>
+  <% if (puedeEditar) { %><a class="btn" href="/categorias/nueva">+ Nueva categoría</a><% } %>
+</div>
+<div class="tabla-wrap">
+  <table>
+    <thead>
+      <tr><th>#</th><th>Nombre</th><th>Descripción</th><th>Medicamentos</th><% if (puedeEditar) { %><th>Acciones</th><% } %></tr>
+    </thead>
+    <tbody>
+      <% if (!categorias.length) { %><tr><td colspan="5" class="vacio">Sin registros</td></tr><% } %>
+      <% categorias.forEach(function (c) { %>
+        <tr>
+          <td><%= c.id %></td>
+          <td><strong><%= c.nombre %></strong></td>
+          <td><%= c.descripcion || '—' %></td>
+          <td><%= c.medicamentos.length %></td>
+          <% if (puedeEditar) { %>
+            <td class="acciones">
+              <a class="btn btn-sm" href="/categorias/<%= c.id %>/editar">Editar</a>
+              <% if (esAdmin) { %>
+                <form method="post" action="/categorias/<%= c.id %>/eliminar" onsubmit="return confirm('¿Eliminar esta categoría?')">
+                  <button class="btn btn-sm btn-peligro" type="submit">Eliminar</button>
+                </form>
+              <% } %>
+            </td>
+          <% } %>
+        </tr>
+      <% }) %>
+    </tbody>
+  </table>
+</div>
+<%- include('../partials/foot') %>

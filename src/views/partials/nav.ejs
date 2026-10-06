@@ -1,0 +1,31 @@
+<% const usr = locals.user || null; const ruta = locals.path || ''; const act = (p) => (ruta.startsWith(p) ? 'activo' : ''); %>
+<header class="nav">
+  <div class="nav-in">
+    <a class="marca" href="<%= usr ? '/menu' : '/login' %>">&#128138; Farmacia</a>
+    <nav class="enlaces">
+      <% if (usr) { %>
+        <a class="<%= act('/menu') %>" href="/menu">Men&uacute;</a>
+        <a class="<%= act('/categorias') %>" href="/categorias">Categor&iacute;as</a>
+        <a class="<%= act('/medicamentos') %>" href="/medicamentos">Medicamentos</a>
+        <a class="<%= act('/diseno-bd') %>" href="/diseno-bd">Dise&ntilde;o BD</a>
+        <% if (usr.rol === 'administrador' || usr.rol === 'moderador') { %>
+          <a href="/categorias/nueva">+ Categor&iacute;a</a>
+          <a href="/medicamentos/nuevo">+ Medicamento</a>
+        <% } %>
+        <% if (usr.rol === 'administrador') { %>
+          <a class="<%= act('/usuarios') %>" href="/usuarios">Usuarios</a>
+        <% } %>
+      <% } else { %>
+        <a class="<%= act('/login') %>" href="/login">Iniciar sesi&oacute;n</a>
+        <a class="<%= act('/registro') %>" href="/registro">Registrarse</a>
+      <% } %>
+    </nav>
+    <% if (usr) { %>
+      <div class="sesion">
+        <span class="rol rol-<%= usr.rol %>"><%= usr.rol %></span>
+        <span class="nombre"><%= usr.nombre %></span>
+        <form method="post" action="/logout"><button class="btn btn-sec" type="submit">Cerrar sesi&oacute;n</button></form>
+      </div>
+    <% } %>
+  </div>
+</header>

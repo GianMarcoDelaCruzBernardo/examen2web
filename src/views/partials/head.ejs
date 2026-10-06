@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title><%= typeof title !== 'undefined' ? title + ' | ' : '' %>Farmacia</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+<%- include('nav') %>
+<main class="contenedor">
+<% const fl = locals.flash || {}; %>
+<% if (fl.ok) { %><div class="alerta ok"><%= fl.ok %></div><% } %>
+<% if (fl.error) { %><div class="alerta error"><%= fl.error %></div><% } %>

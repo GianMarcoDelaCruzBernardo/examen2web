@@ -1,0 +1,28 @@
+<%- include('partials/head', { title: 'Menú principal' }) %>
+<% const puedeEditar = ['administrador', 'moderador'].includes(user.rol); %>
+<h1>Menú principal</h1>
+<p class="sub">Bienvenido, <strong><%= user.nombre %></strong>. Tu rol es <span class="rol rol-<%= user.rol %>"><%= user.rol %></span>.</p>
+
+<div class="grid">
+  <div class="stat"><span class="num"><%= stats.categorias %></span><span>Categorías</span></div>
+  <div class="stat"><span class="num"><%= stats.medicamentos %></span><span>Medicamentos</span></div>
+  <div class="stat <%= stats.stockBajo ? 'alerta-stat' : '' %>"><span class="num"><%= stats.stockBajo %></span><span>Con stock bajo (&lt; 10)</span></div>
+  <% if (stats.usuarios !== null) { %>
+    <div class="stat"><span class="num"><%= stats.usuarios %></span><span>Usuarios</span></div>
+  <% } %>
+</div>
+
+<h2>Accesos rápidos</h2>
+<div class="grid">
+  <a class="acceso" href="/medicamentos"><h3>Medicamentos</h3><p>Consulta el inventario y su categoría.</p></a>
+  <a class="acceso" href="/categorias"><h3>Categorías</h3><p>Revisa las categorías disponibles.</p></a>
+  <a class="acceso" href="/diseno-bd"><h3>Diseño de la BD</h3><p>Tablas y relación de bd_Farmacia.</p></a>
+  <% if (puedeEditar) { %>
+    <a class="acceso" href="/medicamentos/nuevo"><h3>+ Nuevo medicamento</h3><p>Registra un medicamento.</p></a>
+    <a class="acceso" href="/categorias/nueva"><h3>+ Nueva categoría</h3><p>Registra una categoría.</p></a>
+  <% } %>
+  <% if (user.rol === 'administrador') { %>
+    <a class="acceso" href="/usuarios"><h3>Usuarios</h3><p>Administra roles y cuentas.</p></a>
+  <% } %>
+</div>
+<%- include('partials/foot') %>
